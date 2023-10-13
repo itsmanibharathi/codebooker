@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  mongodb:
+    container_name: codebooker_mongodb
+    build:
+      context: ./mongodb
+    volumes:
+      - mongodb-data:/data/db
+    restart: always
+    environment:
+        MONGO_INITDB_DATABASE: codebooker
+    ports:
+      - "27017:27017"
+    networks:
+      - codebooker-network
+
+networks:
+  codebooker-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
+  

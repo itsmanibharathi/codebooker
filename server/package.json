@@ -4,6 +4,8 @@
     "description": "Backend Server for the CodeBooker",
     "main": "index.js",
     "scripts": {
+        "mongosetup": "node setup.js",
+        "start": "nodemon index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "proxy": "http://localhost:3001",

@@ -1,0 +1,64 @@
+version: '3.7'
+services:
+  mongodb:
+    container_name: codebooker_mongodb
+    build:
+      context: ./mongodb
+    volumes:
+      - codebooker_mongodb_data:/data/db
+    restart: always
+    environment:
+        MONGO_INITDB_DATABASE: codebooker
+    ports:
+      - "27017:27017"
+    networks:
+      - codebooker-network
+
+  server:
+    container_name: codebooker_server
+    build:
+      context: ./server
+    volumes:
+      - ./server:/server
+      - codebooker_server_node_modules:/server/node_modules
+    environment:
+      PORT: 3001
+      MONGO_DB: mongodb://codebooker_mongodb:27017/codebooker
+      MAIL_USERNAME: mani@gmail.com
+      MAIL_PASSWORD: 123
+      # for windows users
+      WATCHPACK_POLLING: 1 
+    restart: always
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongodb
+    networks:
+      - codebooker-network
+
+  client:
+    container_name: codebooker_client
+    build:
+      context: ./client
+    volumes:
+      - ./client:/client
+      - codebooker_client_node_modules:/client/node_modules
+    environment:
+    # for windows users
+      WATCHPACK_POLLING: 1 
+
+    ports:
+      - "3000:3000"
+    networks:
+      - codebooker-network
+
+networks:
+  codebooker-network:
+    driver: bridge
+
+volumes:
+  codebooker_mongodb_data:
+  codebooker_server_node_modules:
+  codebooker_client_node_modules:
+
+
